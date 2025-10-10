@@ -1,0 +1,68 @@
+
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+class Solution:
+    def amountOfTime(self, root: Optional[TreeNode], start: int) -> int:
+        def get_parent_address(root):
+            parent_map = {}
+            q = deque([root])
+            while q:
+                node = q.popleft()
+                if node.left:
+                    parent_map[node.left] = node
+                    q.append(node.left)
+                if node.right:
+                    parent_map[node.right] = node
+                    q.append(node.right)
+            return parent_map
+
+        def inorder(root, start):
+            if root is None:
+                return None
+            if root.val == start:
+                return root
+            left = inorder(root.left, start)
+            if left:
+                return left
+            return inorder(root.right, start)
+
+        parent_map = get_parent_address(root)
+        startNode = inorder(root, start)
+
+        if not startNode:
+            return 0  
+
+        time = 0
+        visited = set([startNode])
+        que = deque([startNode])
+
+        while que:
+            size = len(que)
+            for _ in range(size):
+                node = que.popleft()
+
+                # Parent
+                if node in parent_map and parent_map[node] not in visited:
+                    visited.add(parent_map[node])
+                    que.append(parent_map[node])
+
+                # Left
+                if node.left and node.left not in visited:
+                    visited.add(node.left)
+                    que.append(node.left)
+
+                # Right
+                if node.right and node.right not in visited:
+                    visited.add(node.right)
+                    que.append(node.right)
+
+            if que:
+                time += 1  
+
+        return time
