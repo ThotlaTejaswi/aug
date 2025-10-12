@@ -1,0 +1,31 @@
+'''heaps
+left child is 2*index+1
+right child is 2*index+2
+index of internal node is 0 to n/2-1
+index of leaf node is n/2 to n-1
+parent=ind-1/2'''
+arr=[10,7,6,3,2,4,5,1]
+ind=int(input())
+val=int(input())
+def heapifyDown(arr,ind):
+    n=len(arr)
+    largest=ind
+    lchild=2*ind+1
+    rchild=2*ind+2
+    if(lchild<n and arr[lchild]>arr[ind]):
+        largest=lchild
+    elif(rchild<n and arr[rchild]>arr[ind]):
+        largest=rchild
+        if(ind!=largest):
+            arr[largest],arr[ind]=arr[ind],arr[largest]
+            heapifyDown(arr,largest)
+def heapifyUp(arr,ind):
+    parent=(ind-1)//2
+    if(ind>0 and arr[parent]<arr[ind]):
+        arr[ind],arr[parent]=arr[parent],arr[ind]
+if(val<arr[ind]):
+    arr[ind]=val
+    heapifyDown(arr,ind)
+elif(val>arr[ind]):
+    arr[ind]=val
+    heapifyUp(arr,ind)
