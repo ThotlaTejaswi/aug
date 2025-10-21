@@ -1,0 +1,20 @@
+import re
+
+class Solution(object):
+    def isNumber(self, s):
+        """
+        :type s: str
+        :rtype: bool
+        """
+        number_pattern = re.compile(r"""
+            ^[+-]?                    # optional sign
+            (                         # start of number part
+                (\d+\.\d*) |          # digits before and optional digits after dot
+                (\.\d+)     |         # just dot with digits after
+                (\d+)                 # just digits (integer)
+            )
+            ([eE][+-]?\d+)?           # optional exponent part
+            $                         # end of string
+        """, re.VERBOSE)
+
+        return bool(number_pattern.match(s.strip()))
